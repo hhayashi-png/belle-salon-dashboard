@@ -34,7 +34,7 @@ const COL = {
   CUSTOMER_NAME: 16, // Q: お客様名
   CUSTOMER_ID: 18,   // S: お客様番号
   NEW_RETURN: 21,    // V: 新規再来
-  Y_STORE: 25        // Z: Y列店舗名
+  Y_STORE: 24        // Y: Y列店舗名（親客列はデータに含まれないため24）
 };
 
 // ===== UTILITY FUNCTIONS =====
@@ -347,7 +347,6 @@ function computeLTV() {
 // ===== RENDERING =====
 
 function renderAll() {
-  renderTabNav();
   renderOverview();
   renderStoreTab();
   renderStaffTab();
@@ -856,5 +855,6 @@ function checkAlertBanner() {
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('today-date').textContent = new Date().toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+  renderTabNav();
   loadAllData();
 });
