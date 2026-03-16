@@ -1,0 +1,4 @@
+store_id,store_name,area,type,open_date,hpb_url,slack_channel
+ST01,大宮(直営),埼玉,直営,2022-04-01,https://beauty.hotpepper.jp/slnH000XXXXX/,#salon-omiya
+ST02,川崎(直営),神奈川,直営,2022-06-01,https://beauty.hotpepper.jp/slnH000YYYYY/,#salon-kawasaki
+ST03,池袋(直営),東京,直営,2022-09-01,https://beauty.hotpepper.jp/slnH000ZZZZZ/,#salon-ikebukuro

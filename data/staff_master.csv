@@ -1,0 +1,9 @@
+staff_id,staff_name,store,role,hire_date,status
+S001,管原 Belle大宮,大宮(直営),セラピスト,2023-04-01,active
+S002,上野 Belle大宮,大宮(直営),セラピスト,2022-10-01,active
+S003,村上 Belle大宮,大宮(直営),セラピスト,2023-07-01,active
+S004,松尾 Belle大宮,大宮(直営),セラピスト,2024-01-01,active
+S005,田中 Belle川崎,川崎(直営),セラピスト,2022-06-01,active
+S006,鈴木 Belle川崎,川崎(直営),セラピスト,2023-03-01,active
+S007,高橋 Belle池袋,池袋(直営),セラピスト,2023-09-01,active
+S008,山口 Belle池袋,池袋(直営),セラピスト,2022-12-01,active

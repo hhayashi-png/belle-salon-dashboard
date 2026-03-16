@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Belle Salon Management OS</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+  <div id="loading-screen">
+    <div class="loader-inner">
+      <div class="loader-logo">BELLE OS</div>
+      <div class="loader-bar"><div class="loader-fill"></div></div>
+      <div class="loader-text">データを読み込んでいます...</div>
+    </div>
+  </div>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-left">
+        <span class="logo-mark">⬡</span>
+        <div>
+          <div class="logo-text">BELLE SALON OS</div>
+          <div class="logo-sub">経営管理システム</div>
+        </div>
+      </div>
+      <div class="header-center">
+        <div id="current-period">—</div>
+        <div class="header-status"><span class="status-dot"></span>LIVE</div>
+      </div>
+      <div class="header-right">
+        <button class="btn-refresh" onclick="loadAllData()">↻ 更新</button>
+        <div class="header-date" id="today-date"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Alert Banner -->
+  <div id="alert-banner" class="alert-banner hidden"></div>
+
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="overview">📊 全体KPI</button>
+    <button class="tab-btn" data-tab="store">🏪 店舗別</button>
+    <button class="tab-btn" data-tab="staff">👤 スタッフ</button>
+    <button class="tab-btn" data-tab="ranking">🏆 ランキング</button>
+    <button class="tab-btn" data-tab="ltv">💎 LTV管理</button>
+    <button class="tab-btn" data-tab="alerts">🚨 アラート</button>
+    <button class="tab-btn" data-tab="sv">📋 SVアクション</button>
+  </nav>
+
+  <main>
+    <!-- ========= TAB: OVERVIEW ========= -->
+    <div class="tab-content active" id="tab-overview">
+      <section class="kpi-grid" id="overview-kpis"></section>
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-title">店舗別売上</div>
+          <canvas id="chart-store-sales"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">新規達成率</div>
+          <canvas id="chart-new-rate"></canvas>
+        </div>
+      </div>
+      <div class="charts-row">
+        <div class="chart-card chart-wide">
+          <div class="chart-title">日別売上推移</div>
+          <canvas id="chart-daily"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========= TAB: STORE ========= -->
+    <div class="tab-content" id="tab-store">
+      <div id="store-filter" class="filter-row"></div>
+      <div id="store-kpi-cards"></div>
+      <div class="table-card">
+        <div class="table-title">店舗別KPI一覧</div>
+        <div class="table-wrap">
+          <table id="store-table">
+            <thead>
+              <tr>
+                <th>店舗名</th>
+                <th>新規数</th>
+                <th>新規目標</th>
+                <th>達成率</th>
+                <th>売上</th>
+                <th>売上目標</th>
+                <th>売上達成率</th>
+                <th>平均単価</th>
+                <th>単価目標</th>
+                <th>新規契約率</th>
+                <th>継続契約率</th>
+              </tr>
+            </thead>
+            <tbody id="store-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========= TAB: STAFF ========= -->
+    <div class="tab-content" id="tab-staff">
+      <div id="staff-store-filter" class="filter-row"></div>
+      <div class="table-card">
+        <div class="table-title">スタッフ別KPI</div>
+        <div class="table-wrap">
+          <table id="staff-table">
+            <thead>
+              <tr>
+                <th>スタッフ名</th>
+                <th>所属店舗</th>
+                <th>新規数</th>
+                <th>売上</th>
+                <th>平均単価</th>
+                <th>新規契約数</th>
+                <th>新規契約率</th>
+                <th>継続契約率</th>
+              </tr>
+            </thead>
+            <tbody id="staff-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========= TAB: RANKING ========= -->
+    <div class="tab-content" id="tab-ranking">
+      <div class="ranking-grid">
+        <div class="ranking-card" id="rank-sales">
+          <div class="ranking-title">💴 売上ランキング</div>
+          <div class="ranking-list"></div>
+        </div>
+        <div class="ranking-card" id="rank-contract">
+          <div class="ranking-title">📝 契約率ランキング</div>
+          <div class="ranking-list"></div>
+        </div>
+        <div class="ranking-card" id="rank-unit">
+          <div class="ranking-title">💰 平均単価ランキング</div>
+          <div class="ranking-list"></div>
+        </div>
+        <div class="ranking-card" id="rank-new">
+          <div class="ranking-title">✨ 新規獲得ランキング</div>
+          <div class="ranking-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========= TAB: LTV ========= -->
+    <div class="tab-content" id="tab-ltv">
+      <section class="kpi-grid" id="ltv-kpis"></section>
+      <div class="table-card">
+        <div class="table-title">回数券LTV管理</div>
+        <div class="table-wrap">
+          <table id="ltv-table">
+            <thead>
+              <tr>
+                <th>顧客名</th>
+                <th>顧客ID</th>
+                <th>所属店舗</th>
+                <th>担当スタッフ</th>
+                <th>回数券売上</th>
+                <th>LTV</th>
+                <th>最終来店</th>
+                <th>ステータス</th>
+              </tr>
+            </thead>
+            <tbody id="ltv-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========= TAB: ALERTS ========= -->
+    <div class="tab-content" id="tab-alerts">
+      <div id="hpb-alerts"></div>
+      <div id="churn-alerts"></div>
+    </div>
+
+    <!-- ========= TAB: SV ACTIONS ========= -->
+    <div class="tab-content" id="tab-sv">
+      <div id="sv-actions"></div>
+    </div>
+  </main>
+
+  <footer>
+    <div>Belle Salon Management OS &copy; 2026 | データ更新: <span id="last-updated">—</span></div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
